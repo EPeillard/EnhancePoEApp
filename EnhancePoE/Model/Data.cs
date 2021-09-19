@@ -23,16 +23,17 @@ namespace EnhancePoE
 
         public static int SetAmount { get; set; } = 0;
         public static int SetTargetAmount { get; set; } = 0;
+        public static int SetTargetAmountInfluenced { get; set; } = 0;
 
         public static List<ItemSet> ItemSetList { get; set; }
         public static List<ItemSet> ItemSetListHighlight { get; set; } = new List<ItemSet>();
 
-        public static ItemSet ItemSetShaper { get; set; }
-        public static ItemSet ItemSetElder { get; set; }
-        public static ItemSet ItemSetWarlord { get; set; }
-        public static ItemSet ItemSetCrusader { get; set; }
-        public static ItemSet ItemSetRedeemer { get; set; }
-        public static ItemSet ItemSetHunter { get; set; }
+        public static List<ItemSet> ItemSetShaperList { get; set; }
+        public static List<ItemSet> ItemSetElderList { get; set; }
+        public static List<ItemSet> ItemSetWarlordList { get; set; }
+        public static List<ItemSet> ItemSetCrusaderList { get; set; }
+        public static List<ItemSet> ItemSetRedeemerList { get; set; }
+        public static List<ItemSet> ItemSetHunterList { get; set; }
 
         public static CancellationTokenSource cs { get; set; } = new CancellationTokenSource();
         public static CancellationToken ct { get; set; } = cs.Token;
@@ -54,16 +55,58 @@ namespace EnhancePoE
                     SetTargetAmount += 4;
                 }
             }
+
+            if (Properties.Settings.Default.ExaltedSets > 0)
+            {
+                SetTargetAmountInfluenced = Properties.Settings.Default.ExaltedSets;
+            }
         }
 
         private static void GenerateInfluencedItemSets()
         {
-            ItemSetShaper = new ItemSet { InfluenceType = "Shaper" };
-            ItemSetElder = new ItemSet { InfluenceType = "Elder" };
-            ItemSetWarlord = new ItemSet { InfluenceType = "Warlord" };
-            ItemSetHunter = new ItemSet { InfluenceType = "Hunter" };
-            ItemSetCrusader = new ItemSet { InfluenceType = "Crusader" };
-            ItemSetRedeemer = new ItemSet { InfluenceType = "Redeemer" };
+            InfluencedItemLists = new List<List<ItemSet>>();
+
+            List<ItemSet> ret = new List<ItemSet>();
+            for (int i = 0; i < SetTargetAmountInfluenced; i++)
+            {
+                ret.Add(new ItemSet { InfluenceType = "Shaper" });
+            }
+            ItemSetShaperList = ret;
+
+            ret = new List<ItemSet>();
+            for (int i = 0; i < SetTargetAmountInfluenced; i++)
+            {
+                ret.Add(new ItemSet { InfluenceType = "Elder" });
+            }
+            ItemSetElderList = ret;
+
+            ret = new List<ItemSet>();
+            for (int i = 0; i < SetTargetAmountInfluenced; i++)
+            {
+                ret.Add(new ItemSet { InfluenceType = "Warlord" });
+            }
+            ItemSetWarlordList = ret;
+
+            ret = new List<ItemSet>();
+            for (int i = 0; i < SetTargetAmountInfluenced; i++)
+            {
+                ret.Add(new ItemSet { InfluenceType = "Hunter" });
+            }
+            ItemSetHunterList = ret;
+
+            ret = new List<ItemSet>();
+            for (int i = 0; i < SetTargetAmountInfluenced; i++)
+            {
+                ret.Add(new ItemSet { InfluenceType = "Crusader" });
+            }
+            ItemSetCrusaderList = ret;
+
+            ret = new List<ItemSet>();
+            for (int i = 0; i < SetTargetAmountInfluenced; i++)
+            {
+                ret.Add(new ItemSet { InfluenceType = "Redeemer" });
+            }
+            ItemSetRedeemerList = ret;
         }
 
         private static void GenerateItemSetList()
@@ -240,51 +283,69 @@ namespace EnhancePoE
             {
                 foreach (Item i in tab.ItemListShaper)
                 {
-                    if (ItemSetShaper.EmptyItemSlots.Count == 0)
+                    foreach (ItemSet s in ItemSetShaperList)
                     {
-                        break;
+                        if (s.IsValidItem(i))
+                        {
+                            s.AddItem(i);
+                            break;
+                        }
                     }
-                    ItemSetShaper.AddItem(i);
                 }
                 foreach (Item i in tab.ItemListElder)
                 {
-                    if (ItemSetElder.EmptyItemSlots.Count == 0)
+                    foreach (ItemSet s in ItemSetElderList)
                     {
-                        break;
+                        if (s.IsValidItem(i))
+                        {
+                            s.AddItem(i);
+                            break;
+                        }
                     }
-                    ItemSetElder.AddItem(i);
                 }
                 foreach (Item i in tab.ItemListCrusader)
                 {
-                    if (ItemSetCrusader.EmptyItemSlots.Count == 0)
+                    foreach (ItemSet s in ItemSetCrusaderList)
                     {
-                        break;
+                        if (s.IsValidItem(i))
+                        {
+                            s.AddItem(i);
+                            break;
+                        }
                     }
-                    ItemSetCrusader.AddItem(i);
                 }
                 foreach (Item i in tab.ItemListWarlord)
                 {
-                    if (ItemSetWarlord.EmptyItemSlots.Count == 0)
+                    foreach (ItemSet s in ItemSetWarlordList)
                     {
-                        break;
+                        if (s.IsValidItem(i))
+                        {
+                            s.AddItem(i);
+                            break;
+                        }
                     }
-                    ItemSetWarlord.AddItem(i);
                 }
                 foreach (Item i in tab.ItemListRedeemer)
                 {
-                    if (ItemSetRedeemer.EmptyItemSlots.Count == 0)
+                    foreach (ItemSet s in ItemSetRedeemerList)
                     {
-                        break;
+                        if (s.IsValidItem(i))
+                        {
+                            s.AddItem(i);
+                            break;
+                        }
                     }
-                    ItemSetRedeemer.AddItem(i);
                 }
                 foreach (Item i in tab.ItemListHunter)
                 {
-                    if (ItemSetHunter.EmptyItemSlots.Count == 0)
+                    foreach (ItemSet s in ItemSetHunterList)
                     {
-                        break;
+                        if (s.IsValidItem(i))
+                        {
+                            s.AddItem(i);
+                            break;
+                        }
                     }
-                    ItemSetHunter.AddItem(i);
                 }
             }
         }
